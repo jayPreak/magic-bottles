@@ -1,0 +1,370 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(124, 77, 255, 0.28), transparent 60%),
+    radial-gradient(1000px 700px at 110% 110%, rgba(0, 188, 212, 0.16), transparent 60%),
+    linear-gradient(165deg, #14102b 0%, #1e1541 45%, #0f1e38 100%);
+  background-attachment: fixed;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Mobile-first: the app IS a phone column. On desktop it just sits centered. */
+#app {
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+}
+
+#level-badge {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 9px 22px;
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.icon-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.12s, filter 0.2s, opacity 0.2s;
+}
+
+.icon-btn:active {
+  transform: scale(0.88);
+  filter: brightness(1.35);
+}
+
+.icon-btn:disabled {
+  opacity: 0.3;
+}
+
+#moves-row {
+  text-align: center;
+  margin-top: 10px;
+}
+
+#moves-chip {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 14px;
+  border-radius: 999px;
+}
+
+#board {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 26px 14px;
+  padding: 20px 4px;
+  overflow: visible;
+}
+
+.bottle {
+  position: relative;
+  width: 58px;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.bottle.selected {
+  transform: translateY(-16px);
+}
+
+.bottle.done .glass {
+  box-shadow:
+    0 0 18px 4px rgba(255, 224, 110, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.bottle .neck {
+  width: 34px;
+  height: 12px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+}
+
+.bottle .glass {
+  position: relative;
+  width: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.42);
+  border-radius: 11px 11px 27px 27px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  box-shadow:
+    inset 0 -6px 14px rgba(0, 0, 0, 0.18),
+    0 10px 14px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.3s;
+}
+
+.segment {
+  width: 100%;
+  transition: height 0.22s ease;
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.segment::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.32), transparent 45%, rgba(0, 0, 0, 0.2));
+  pointer-events: none;
+}
+
+.segment.hidden-seg::after {
+  background: none;
+}
+
+.bottle .shine {
+  position: absolute;
+  top: 18px;
+  left: 8px;
+  width: 7px;
+  height: 55%;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.08));
+  pointer-events: none;
+}
+
+.stream {
+  position: absolute;
+  width: 6px;
+  border-radius: 3px;
+  z-index: 15;
+  transform-origin: top;
+  animation: stream-in 0.12s ease-out;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes stream-in {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.bottle.pop {
+  animation: pop 0.25s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.bottle.shake {
+  animation: shake 0.18s ease 2;
+}
+
+/* ---------- Win overlay ---------- */
+#win-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 5, 22, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+#win-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#win-card {
+  position: relative;
+  width: min(340px, calc(100vw - 48px));
+  background: linear-gradient(165deg, #322566 0%, #251a4e 55%, #1b1440 100%);
+  border-radius: 28px;
+  padding: 30px 28px 28px;
+  text-align: center;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  animation: card-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* gradient border ring */
+#win-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  padding: 1.5px;
+  background: linear-gradient(160deg, rgba(255, 209, 102, 0.8), rgba(131, 56, 236, 0.5) 40%, rgba(255, 255, 255, 0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes card-in {
+  from { transform: scale(0.7) translateY(30px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+#win-stars {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 6px;
+  height: 64px;
+}
+
+.star {
+  font-size: 40px;
+  line-height: 1;
+  background: linear-gradient(180deg, #ffe58a, #ffb300);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 8px rgba(255, 179, 0, 0.45));
+  animation: star-in 0.5s cubic-bezier(0.34, 1.8, 0.64, 1) both;
+}
+
+.star.big {
+  font-size: 58px;
+  animation-delay: 0.15s;
+}
+
+.star:last-child {
+  animation-delay: 0.28s;
+}
+
+@keyframes star-in {
+  from { transform: scale(0) rotate(-30deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+#win-card h2 {
+  margin: 4px 0 6px;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  background: linear-gradient(180deg, #ffffff, #c9b8ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#win-stats {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+#btn-next {
+  width: 100%;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  color: #33150a;
+  background: linear-gradient(135deg, #ffd166 0%, #ff9e42 60%, #ff7b54 100%);
+  border: none;
+  border-radius: 999px;
+  padding: 16px 32px;
+  cursor: pointer;
+  box-shadow:
+    0 10px 28px rgba(255, 158, 66, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: transform 0.12s, box-shadow 0.2s;
+}
+
+#btn-next:active {
+  transform: scale(0.95);
+  box-shadow: 0 4px 12px rgba(255, 158, 66, 0.3);
+}
+
+/* ---------- Confetti ---------- */
+#confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  border-radius: 2px;
+  animation: confetti-fall linear infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg) rotateY(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(660deg) rotateY(360deg);
+    opacity: 0.7;
+  }
+}

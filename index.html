@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#14102b" />
+  <title>Magic Bottles</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=5" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <button id="btn-restart" class="icon-btn" aria-label="Restart level">↻</button>
+      <div id="level-badge">Level&nbsp;<span id="level-num">1</span></div>
+      <button id="btn-undo" class="icon-btn" aria-label="Undo move">⤺</button>
+    </header>
+
+    <div id="moves-row"><span id="moves-chip"><span id="moves-count">0</span> moves</span></div>
+
+    <main id="board" aria-label="Game board"></main>
+
+    <div id="win-overlay" class="hidden" style="display:none">
+      <div id="confetti"></div>
+      <div id="win-card">
+        <div id="win-stars">
+          <span class="star">★</span><span class="star big">★</span><span class="star">★</span>
+        </div>
+        <h2 id="win-title">Level Complete!</h2>
+        <p id="win-stats"></p>
+        <button id="btn-next">Next Level →</button>
+      </div>
+    </div>
+  </div>
+  <script src="game.js?v=5"></script>
+</body>
+</html>
