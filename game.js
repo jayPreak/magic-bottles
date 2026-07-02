@@ -226,6 +226,10 @@ const winTitle = document.getElementById("win-title");
 const winStats = document.getElementById("win-stats");
 const nextBtn = document.getElementById("btn-next");
 const confettiEl = document.getElementById("confetti");
+const levelBadge = document.getElementById("level-badge");
+const levelSelectOverlay = document.getElementById("level-select-overlay");
+const levelGrid = document.getElementById("level-grid");
+const closeLevelsBtn = document.getElementById("btn-close-levels");
 
 // Show/hide also toggles display so the overlay can never appear
 // before the stylesheet loads (the fade still comes from the CSS class).
@@ -551,6 +555,34 @@ nextBtn.addEventListener("click", () => {
   localStorage.setItem(STORAGE_KEY, String(state.level));
   startLevel();
 });
+
+// ---------- Level select (no saved progress, so every level is open) ----------
+function openLevelSelect() {
+  if (state.animating) return;
+  levelGrid.innerHTML = "";
+  for (let lvl = 1; lvl <= TOTAL_LEVELS; lvl++) {
+    const tile = document.createElement("button");
+    tile.className = "level-tile" + (lvl === state.level ? " current" : "");
+    tile.textContent = lvl;
+    tile.addEventListener("click", () => {
+      state.level = lvl;
+      localStorage.setItem(STORAGE_KEY, String(state.level));
+      closeLevelSelect();
+      startLevel();
+    });
+    levelGrid.appendChild(tile);
+  }
+  levelSelectOverlay.style.display = "flex";
+  requestAnimationFrame(() => levelSelectOverlay.classList.remove("hidden"));
+}
+
+function closeLevelSelect() {
+  levelSelectOverlay.classList.add("hidden");
+  levelSelectOverlay.style.display = "none";
+}
+
+levelBadge.addEventListener("click", openLevelSelect);
+closeLevelsBtn.addEventListener("click", closeLevelSelect);
 
 // Taps are hit-tested at board level with generous padding, so slightly
 // off-target taps (fat fingers, synthetic clicks) still land on a bottle.
